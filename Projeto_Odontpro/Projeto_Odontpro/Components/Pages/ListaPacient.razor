@@ -1,0 +1,178 @@
+﻿@page "/listaPaciente"
+
+<h3>Lista de Pacientes</h3>
+
+
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sistema de Clínica</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        <style>
+
+  
+
+            /* ========= CONTEÚDO PRINCIPAL ========= */
+            .container {
+              margin-left: 260px; /* espaço para o menu */
+              padding: 40px;
+              width: 100%;
+            }
+
+            .content-box {
+              background: #fff;
+              padding: 25px;
+              border-radius: 12px;
+              box-shadow: 0px 4px 12px rgba(0,0,0,0.2);
+              width: 100%;
+              max-width: 1000px;
+            }
+
+            h1 {
+              text-align: center;
+              color: #333;
+              margin-bottom: 20px;
+            }
+
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 10px;
+            }
+
+            table th, table td {
+              padding: 12px;
+              text-align: left;
+              border-bottom: 1px solid #ddd;
+            }
+
+            table th {
+              background: #007BFF;
+              color: white;
+            }
+
+            table tr:hover {
+              background: #f1f1f1;
+            }
+
+            .btn {
+              padding: 6px 12px;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              color: white;
+            }
+
+            .btn-edit {
+              background-color: #28a745;
+            }
+
+            .btn-save {
+              background-color: #17a2b8;
+            }
+
+            .btn-delete {
+              background-color: #dc3545;
+            }
+
+            input[type="text"], input[type="number"] {
+              width: 95%;
+              padding: 5px;
+              border-radius: 5px;
+              border: 1px solid #ccc;
+            }
+        </style>
+    </head>
+    <body>
+
+       
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="container">
+            <div class="content-box">
+                <h1>Lista de Pacientes</h1>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Idade</th>
+                            <th>Telefone</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaPacientes">
+                        <tr>
+                            <td>001</td>
+                            <td>Ana</td>
+                            <td>32</td>
+                            <td>(11) 91234-5678</td>
+                            <td>
+                                <button class="btn btn-edit" onclick="editarLinha(this)">Editar</button>
+                                <button class="btn btn-delete" onclick="excluirLinha(this)">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>002</td>
+                            <td>João Pereira</td>
+                            <td>45</td>
+                            <td>(11) 99876-5432</td>
+                            <td>
+                                <button class="btn btn-edit" onclick="editarLinha(this)">Editar</button>
+                                <button class="btn btn-delete" onclick="excluirLinha(this)">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>003</td>
+                            <td>Ana Souza</td>
+                            <td>28</td>
+                            <td>(21) 97654-3210</td>
+                            <td>
+                                <button class="btn btn-edit" onclick="editarLinha(this)">Editar</button>
+                                <button class="btn btn-delete" onclick="excluirLinha(this)">Excluir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SCRIPTS -->
+        <script>
+            
+
+            // Edição e exclusão de pacientes
+            function editarLinha(botao) {
+              let linha = botao.parentNode.parentNode;
+              let colunas = linha.querySelectorAll("td");
+
+              if (botao.innerText === "Editar") {
+                for (let i = 1; i < colunas.length - 1; i++) {
+                  let valor = colunas[i].innerText;
+                  colunas[i].innerHTML = `<input type="text" value="${valor}">`;
+                }
+                botao.innerText = "Salvar";
+                botao.classList.remove("btn-edit");
+                botao.classList.add("btn-save");
+              } else {
+                for (let i = 1; i < colunas.length - 1; i++) {
+                  let input = colunas[i].querySelector("input");
+                  colunas[i].innerText = input.value;
+                }
+                botao.innerText = "Editar";
+                botao.classList.remove("btn-save");
+                botao.classList.add("btn-edit");
+              }
+            }
+
+            function excluirLinha(botao) {
+              let linha = botao.parentNode.parentNode;
+              linha.remove();
+            }
+        </script>
+    </body>
+    </html>
+
+
