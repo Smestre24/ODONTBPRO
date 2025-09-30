@@ -1,5 +1,73 @@
-﻿<h3>Pacientes</h3>
+﻿@page "/pacientes"
+@using Projeto_Odontpro.Models
+@inject PacienteService PacienteService
+
+<h3>Pacientes</h3>
+
+<div class="card">
+    <div class="card-header">
+        <strong>Lista de Pacientes</strong>
+    </div>
+    <div class="card-body">
+        <input type="text" placeholder="Pesquisar..." @bind="filtro" class="form-control mb-2" />
+
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Telefone</th>
+                    <th>Cidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var paciente in pacientesFiltrados)
+                {
+                    <tr>
+                        <td>@paciente.Id</td>
+                        <td>@paciente.Nome</td>
+                        <td>@paciente.CPF</td>
+                        <td>@paciente.Telefone</td>
+                        <td>@paciente.Cidade</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" @onclick="() => Editar(paciente.Id)">Alterar</button>
+                            <button class="btn btn-sm btn-danger" @onclick="() => Apagar(paciente.Id)">Apagar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button class="btn btn-success" @onclick="Adicionar">Adicionar</button>
+    </div>
+</div>
 
 @code {
+    private string filtro = string.Empty;
+    private List<Pacientes> pacientes = new();
+    public IEnumerable<Pacientes> pacientesFiltrados =>
+        pacientes.Where(p => string.IsNullOrEmpty(filtro) || p.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase));
+        
 
+     protected override async Task OnInitializedAsync()
+     {
+        pacientes = await PacienteService.GetPacientesAsync();
+     }
+
+     private void Adicionar()
+     {
+        // Lógica para abrir modal ou navegar para tela de cadastro
+     }
+
+    private void Editar(int id)
+    {
+        // Lógica para editar paciente
+    }
+
+    private void Apagar(int id)
+    {
+        pacientes.RemoveAll(p => p.Id == id);
+    }
 }
