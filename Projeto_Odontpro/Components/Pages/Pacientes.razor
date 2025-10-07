@@ -1,4 +1,4 @@
-﻿@page "/pacientes"
+﻿@* @page "/pacientes"
 @using Projeto_Odontpro.Models
 @inject PacienteService PacienteService
 
@@ -71,3 +71,4 @@
         pacientes.RemoveAll(p => p.Id == id);
     }
 }
+ *@
