@@ -1,1 +1,35 @@
-﻿
+﻿@page "/AtendimentoCliente"
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atendimento ao Cliente</title>
+
+</head>
+<body>
+    <div class="content">
+        <div class="topbar"></div>
+        <div class="user"></div>
+
+        <div class="modal">
+            <div class="modal-header">ATENDIMENTO AO CLIENTE</div>
+            <div class="modal-content">
+                <label for="mensagem">Insira aqui a mensagem automática/lembrete:</label><br><br>
+                <textarea id="mensagem" placeholder="Digite sua mensagem..."></textarea>
+
+                <div class="checkbox">
+                    <input type="checkbox" id="selecionar">
+                    <label for="selecionar">&nbsp;Selecionar todos os e-mails ativos do banco de dados.</label>
+                </div>
+
+                <button class="prosseguir" onclick="prosseguir()">PROSSEGUIR</button>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="estilo.css" />
+
+</body>
+</html>
