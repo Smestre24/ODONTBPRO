@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Projeto_Odontpro\Components\Pages\AtendimentoCliente.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Projeto_Odontpro\Components\Pages\AtendimentoCliente.razor.css" />
+  </ItemGroup>
+
 </Project>
