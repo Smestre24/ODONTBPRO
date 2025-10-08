@@ -9,6 +9,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddSingleton<PacienteService>();
+builder.Services.AddSingleton<FinanceiroService>();
 
 var app = builder.Build();
 
