@@ -34,6 +34,19 @@ CREATE TABLE
     FOREIGN KEY (id_for_fk) REFERENCES fornecedor (id_for)
   );
 
+  CREATE TABLE Clientes (
+    Id INT PRIMARY KEY auto_increment,
+    Nome VARCHAR(100) NOT NULL,
+    Email VARCHAR(150) NOT NULL,
+    Ativo INT NOT NULL DEFAULT 1
+);
+
+
+INSERT INTO Clientes (Nome, Email, Ativo) VALUES
+('João Silva', 'joao@email.com', 1),
+('Maria Souza', 'maria@email.com', 1),
+('Carlos Lima', 'carlos@email.com', 0);
+
 -- Inserindo fornecedores
 INSERT INTO
   fornecedor (nome_for)
