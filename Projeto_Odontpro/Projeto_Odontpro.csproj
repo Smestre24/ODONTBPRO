@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Layout\Header.razor" />
     <Content Remove="Components\Pages\CADAS.razor" />
     <Content Remove="Components\Pages\ListaPacient.razor" />
     <Content Remove="Components\Pages\Paciente.razor" />
