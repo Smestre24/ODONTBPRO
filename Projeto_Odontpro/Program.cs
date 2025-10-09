@@ -1,6 +1,6 @@
 using Projeto_Odontpro.Components;
 using Projeto_Odontpro.Models;
-using System;
+using MySql.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);

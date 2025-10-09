@@ -1,77 +1,86 @@
 ﻿@page "/AtendimentoCliente"
 
-<div class="content">
-    <div class="topbar"></div>
-    <div class="user"></div>
+@page "/atendimento"
+@using System.Threading.Tasks
 
-    <div class="modal">
-        <div class="modal-header">ATENDIMENTO AO CLIENTE</div>
-        <div class="modal-content">
+<div class="card-container">
+    <div class="card">
+        <div class="card-header">ATENDIMENTO AO CLIENTE</div>
 
-            <label for="mensagem">Insira aqui a mensagem automática/lembrete:</label><br><br>
-            <textarea id="mensagem" @bind="Mensagem" placeholder="Digite sua mensagem..."></textarea>
+        <div class="card-body">
+            <label for="msg">Insira aqui a mensagem automática/lembrete:</label>
+            <textarea id="msg" class="message-box" placeholder="Digite sua mensagem..."
+                      @bind="Message" rows="6"></textarea>
 
-            <div class="checkbox">
-                <input type="checkbox" id="selecionar" @bind="SelecionarTodos" @onchange="SelecionarTodosEmails">
-                <label for="selecionar">&nbsp;Selecionar todos os e-mails ativos do banco de dados.</label>
+            <div class="checkbox-row">
+                <input id="selectAll" type="checkbox" @bind="SelectAllEmails" />
+                <label for="selectAll">Selecionar todos os e-mails ativos do banco de dados.</label>
             </div>
 
-            <div class="emails-list">
-                @if (Clientes?.Any() == true)
-                {
-                    @foreach (var cliente in Clientes)
+            <div class="actions">
+                <button class="btn" @onclick="OnProceed" disabled="@(!CanProceed || IsSending)">
+                    @if (IsSending)
                     {
-                        <div>
-                            <input type="checkbox" @bind="cliente.Selecionado" />
-                            <label>@cliente.Nome (@cliente.Email)</label>
-                        </div>
+                        <span class="loader" aria-hidden="true"></span>
                     }
-                }
-                else
-                {
-                    <p>Nenhum cliente encontrado.</p>
-                }
+                    <span>PROSSEGUIR</span>
+                </button>
             </div>
 
-            <button class="prosseguir" @onclick="EnviarMensagem">PROSSEGUIR</button>
+            @if (!string.IsNullOrEmpty(Notification))
+            {
+                <div class="notification @NotificationType">@Notification</div>
+            }
         </div>
     </div>
 </div>
 
 @code {
-    private string Mensagem { get; set; } = string.Empty;
-    private bool SelecionarTodos { get; set; }
-    private List<ClienteSelecionado> Clientes { get; set; } = new();
+    private string Message { get; set; } = "";
+    private bool SelectAllEmails { get; set; } = false;
+    private bool IsSending { get; set; } = false;
+    private string Notification { get; set; } = "";
+    private string NotificationType { get; set; } = ""; // "success" or "error"
 
-    protected override void OnInitialized()
+    // Habilita o botão apenas quando existir mensagem (mude se desejar outra regra)
+    private bool CanProceed => !string.IsNullOrWhiteSpace(Message);
+
+    private async Task OnProceed()
     {
-        // Exemplo de dados fixos (sem banco, só para testar a tela)
-        Clientes = new()
+        Notification = "";
+        NotificationType = "";
+
+        if (!CanProceed)
         {
-            new ClienteSelecionado { Id = 1, Nome = "João Silva", Email = "joao@email.com" },
-            new ClienteSelecionado { Id = 2, Nome = "Maria Souza", Email = "maria@email.com" }
-        };
-    }
+            NotificationType = "error";
+            Notification = "Por favor, digite uma mensagem antes de prosseguir.";
+            return;
+        }
 
-    private void SelecionarTodosEmails(ChangeEventArgs e)
-    {
-        foreach (var cliente in Clientes)
-            cliente.Selecionado = SelecionarTodos;
-    }
+        IsSending = true;
+        try
+        {
+            // Simula envio. Aqui você chamaria sua API/serviço para enviar e-mails
+            await Task.Delay(1000);
 
-    private void EnviarMensagem()
-    {
-        var selecionados = Clientes.Where(c => c.Selecionado).ToList();
-        Console.WriteLine($"Mensagem: {Mensagem}");
-        foreach (var c in selecionados)
-            Console.WriteLine($"Enviando para {c.Email}");
-    }
+            // Exemplo de sucesso:
+            NotificationType = "success";
+            Notification = SelectAllEmails
+                ? "Mensagem pronta para envio a todos os e-mails ativos."
+                : "Mensagem salva. Selecione destinatários para enviar.";
 
-    public class ClienteSelecionado
-    {
-        public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
-        public bool Selecionado { get; set; }
+            // Se quiser limpar:
+            // Message = "";
+            // SelectAllEmails = false;
+        }
+        catch (Exception ex)
+        {
+            NotificationType = "error";
+            Notification = "Ocorreu um erro ao processar: " + ex.Message;
+        }
+        finally
+        {
+            IsSending = false;
+        }
     }
 }
