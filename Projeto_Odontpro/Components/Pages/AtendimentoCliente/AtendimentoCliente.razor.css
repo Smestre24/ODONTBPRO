@@ -17,7 +17,7 @@
 }
 
 .card-header {
-    background: #86b9b5; /* tom próximo ao da imagem */
+    background: #86b9b5; 
     color: white;
     padding: 12px 16px;
     font-weight: 700;
@@ -89,7 +89,7 @@ label {
         cursor: not-allowed;
     }
 
-/* pequeno "spinner" */
+
 .loader {
     display: inline-block;
     width: 14px;
