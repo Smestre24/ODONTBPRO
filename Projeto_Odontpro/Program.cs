@@ -1,5 +1,6 @@
 using Projeto_Odontpro.Components;
 using Projeto_Odontpro.Models;
+using Projeto_Odontpro.Configs;
 using MySql.Data;
 
 
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
+builder.Services.AddSingleton<Conexao>();
 
 builder.Services.AddSingleton<PacienteService>();
 builder.Services.AddSingleton<FinanceiroService>();
