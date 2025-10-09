@@ -38,9 +38,9 @@
     private bool SelectAllEmails { get; set; } = false;
     private bool IsSending { get; set; } = false;
     private string Notification { get; set; } = "";
-    private string NotificationType { get; set; } = ""; // "success" or "error"
+    private string NotificationType { get; set; } = ""; 
 
-    // Habilita o botão apenas quando existir mensagem (mude se desejar outra regra)
+
     private bool CanProceed => !string.IsNullOrWhiteSpace(Message);
 
     private async Task OnProceed()
@@ -58,18 +58,16 @@
         IsSending = true;
         try
         {
-            // Simula envio. Aqui você chamaria sua API/serviço para enviar e-mails
+            
             await Task.Delay(1000);
 
-            // Exemplo de sucesso:
+           
             NotificationType = "success";
             Notification = SelectAllEmails
                 ? "Mensagem pronta para envio a todos os e-mails ativos."
                 : "Mensagem salva. Selecione destinatários para enviar.";
 
-            // Se quiser limpar:
-            // Message = "";
-            // SelectAllEmails = false;
+         
         }
         catch (Exception ex)
         {

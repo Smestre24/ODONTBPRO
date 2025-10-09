@@ -1,0 +1,198 @@
+﻿@page "/estoque"
+
+@using Projeto_Odontpro.Models
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Controle de Estoque</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d8f0ff, #e8eaff);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .container {
+            margin-left: 270px;
+            flex-grow: 1;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .form-box {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 20px;
+            padding: 40px 50px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            animation: fadeIn 0.8s ease;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4fa0ff;
+            margin-bottom: 25px;
+            font-size: 26px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            transition: all 0.2s ease;
+            font-size: 15px;
+        }
+
+            input:focus, textarea:focus, select:focus {
+                border-color: #4fa0ff;
+                box-shadow: 0 0 8px rgba(79,160,255,0.3);
+                outline: none;
+            }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #4fa0ff, #7bcaff);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(79,160,255,0.3);
+        }
+
+            button:hover {
+                background: linear-gradient(90deg, #7bcaff, #4fa0ff);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(79,160,255,0.5);
+            }
+
+        .success {
+            color: #28a745;
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4fa0ff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7f9fc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-box">
+            <h2>Controle de Estoque</h2>
+            <div class="success" id="successMsg">ITEM ADICIONADO AO ESTOQUE!</div>
+
+            <form id="estoqueForm">
+                <label for="nome">Nome do Produto:</label>
+                <input type="text" id="nome" required />
+
+                <label for="quantidade">Quantidade:</label>
+                <input type="number" id="quantidade" min="1" required />
+
+                <label for="formaPagamento">Forma de Pagamento:</label>
+                <select id="formaPagamento" required>
+                    <option value="">Selecione...</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito</option>
+                    <option value="Cartão de Débito">Cartão de Débito</option>
+                    <option value="Pix">Pix</option>
+                </select>
+
+                <label for="marca">Marca:</label>
+                <input type="text" id="marca" required />
+
+                <label for="valor">Valor (R$):</label>
+                <input type="number" id="valor" min="0" step="0.01" required />
+
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" rows="3"></textarea>
+
+                <button type="submit"><i class="bi bi-box-seam"></i> Adicionar ao Estoque</button>
+            </form>
+
+            <table id="tabelaEstoque">
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('estoqueForm');
+        const tabela = document.querySelector('#tabelaEstoque tbody');
+        const successMsg = document.getElementById('successMsg');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const item = {
+                nome: document.getElementById('nome').value,
+                quantidade: document.getElementById('quantidade').value,
+                formaPagamento: document.getElementById('formaPagamento').value,
+                marca: document.getElementById('marca').value,
+                valor: parseFloat(document.getElementById('valor').value).toFixed(2),
+                descricao: document.getElementById('descricao').value
+            };
+
+            const novaLinha = `
+                                <tr>
+                                    <td>${item.nome}</td>
+                                    <td>${item.quantidade}</td>
+                                    <td>${item.formaPagamento}</td>
+                                    <td>${item.marca}</td>
+                                    <td>R$ ${item.valor}</td>
+                                    <td>${item.descricao}</td>
+                                </tr>
+                            `;
+            tabela.insertAdjacentHTML('beforeend', novaLinha);
+
+            successMsg.style.display = 'block';
+            form.reset();
+
+            setTimeout(() => successMsg.style.display = 'none', 4000);
+        });
+    </script>
+</body>
+</html>
