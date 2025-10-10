@@ -1,6 +1,7 @@
 using Projeto_Odontpro.Components;
 using Projeto_Odontpro.Models;
 using Projeto_Odontpro.Configs;
+using Projeto_Odontpro.Services;
 using MySql.Data;
 
 
@@ -11,8 +12,12 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<Conexao>();
 
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddScoped<FuncionarioService>();
 builder.Services.AddSingleton<PacienteService>();
 builder.Services.AddSingleton<FinanceiroService>();
+builder.Services.AddSingleton<FuncionarioService>();
 
 var app = builder.Build();
 
@@ -33,3 +38,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
+
+
+
+
