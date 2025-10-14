@@ -3,6 +3,7 @@ using Projeto_Odontpro.Models;
 using Projeto_Odontpro.Configs;
 using Projeto_Odontpro.Services;
 using MySql.Data;
+using System;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddScoped<FuncionarioService>();
 builder.Services.AddSingleton<PacienteService>();
 builder.Services.AddSingleton<FinanceiroService>();
 builder.Services.AddSingleton<FuncionarioService>();
+
 
 var app = builder.Build();
 

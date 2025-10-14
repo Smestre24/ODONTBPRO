@@ -1,28 +1,24 @@
 ﻿@page "/AtendimentoCliente"
 @using System.Threading.Tasks
 
-<div class="card-container">
+<div class="container">
     <div class="card">
+      
         <div class="card-header">ATENDIMENTO AO CLIENTE</div>
-
+        
         <div class="card-body">
             <label for="msg">Insira aqui a mensagem automática/lembrete:</label>
-            <textarea id="msg" class="message-box" placeholder="Digite sua mensagem..."
-                      @bind="Message" rows="6"></textarea>
+            <textarea id="msg" class="message-box" placeholder="Digite sua mensagem..." @bind="Message" rows="6"></textarea>
 
             <div class="checkbox-row">
-                <input id="selectAll" type="checkbox" @bind="SelectAllEmails" />
                 <label for="selectAll">Selecionar todos os nomes ativos do banco de dados.</label>
+                <input id="selectAll" type="checkbox" @bind="SelectAllEmails" />
+               
             </div>
 
             <div class="actions">
-                <button class="btn" @onclick="OnProceed" disabled="@(!CanProceed || IsSending)">
-                    @if (IsSending)
-                    {
-                        <span class="loader" aria-hidden="true"></span>
-                    }
-                    <span>PROSSEGUIR</span>
-                </button>
+                <button class="btn"><i class="bi bi-box-seam"></i> ENVIAR</button>
+                
             </div>
 
             @if (!string.IsNullOrEmpty(Notification))
