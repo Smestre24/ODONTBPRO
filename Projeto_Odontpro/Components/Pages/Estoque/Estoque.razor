@@ -5,194 +5,139 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Controle de Estoque</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-
+    <meta charset="UTF-8">
+    <title>Cadastro de Estoque - OdontPro</title>
     <style>
         body {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #d8f0ff, #e8eaff);
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #cce4ff;
             display: flex;
         }
 
-        .container {
-            margin-left: 270px;
-            flex-grow: 1;
-            padding: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+        .sidebar {
+            background-color: #42a5f5;
+            width: 220px;
+            height: 100vh;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        .form-box {
-            background: rgba(255, 255, 255, 0.97);
-            border-radius: 20px;
-            padding: 40px 50px;
-            width: 100%;
-            max-width: 700px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            animation: fadeIn 0.8s ease;
+            .sidebar h2 {
+                font-size: 22px;
+                margin-bottom: 30px;
+            }
+
+            .sidebar a {
+                display: block;
+                color: white;
+                text-decoration: none;
+                margin: 15px 0;
+            }
+
+                .sidebar a:hover {
+                    text-decoration: underline;
+                }
+
+        .main {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
         h2 {
             text-align: center;
-            color: #4fa0ff;
-            margin-bottom: 25px;
-            font-size: 26px;
+            color: #2196f3;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
+            margin-top: 10px;
+            font-weight: bold;
         }
 
-        input, textarea, select {
+        input, select, textarea {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 8px;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
             border: 1px solid #ccc;
-            transition: all 0.2s ease;
-            font-size: 15px;
         }
-
-            input:focus, textarea:focus, select:focus {
-                border-color: #4fa0ff;
-                box-shadow: 0 0 8px rgba(79,160,255,0.3);
-                outline: none;
-            }
 
         button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(90deg, #4fa0ff, #7bcaff);
-            color: #fff;
+            margin-top: 20px;
+            padding: 10px 15px;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(79,160,255,0.3);
-        }
-
-            button:hover {
-                background: linear-gradient(90deg, #7bcaff, #4fa0ff);
-                transform: translateY(-2px);
-                box-shadow: 0 6px 15px rgba(79,160,255,0.5);
-            }
-
-        .success {
-            color: #28a745;
-            text-align: center;
-            margin-bottom: 15px;
-            display: none;
-            font-weight: 600;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 30px;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-
-        th {
-            background-color: #4fa0ff;
+            border-radius: 5px;
             color: white;
+            cursor: pointer;
         }
 
-        tr:nth-child(even) {
-            background-color: #f7f9fc;
+        .btn-salvar {
+            background-color: #42a5f5;
+        }
+
+        .btn-cancelar {
+            background-color: #6c757d;
+            margin-left: 10px;
+        }
+
+        .btn-salvar:hover {
+            background-color: #2196f3;
         }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <div class="form-box">
-            <h2>Controle de Estoque</h2>
-            <div class="success" id="successMsg">ITEM ADICIONADO AO ESTOQUE!</div>
+    <div class="main">
+        <div class="form-container">
+            <h2>Cadastro de Estoque</h2>
+            <form>
+                <label>Nome do Item:</label>
+                <input type="text" placeholder="Ex: Anestesia Dental">
 
-            <form id="estoqueForm">
-                <label for="nome">Nome do Produto:</label>
-                <input type="text" id="nome" required />
+                <label>Quantidade:</label>
+                <input type="number" placeholder="Ex: 50">
 
-                <label for="quantidade">Quantidade:</label>
-                <input type="number" id="quantidade" min="1" required />
-
-                <label for="formaPagamento">Forma de Pagamento:</label>
-                <select id="formaPagamento" required>
-                    <option value="">Selecione...</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="Cartão de Crédito">Cartão de Crédito</option>
-                    <option value="Cartão de Débito">Cartão de Débito</option>
-                    <option value="Pix">Pix</option>
+                <label>Forma de Pagamento:</label>
+                <select>
+                    <option>Selecione...</option>
+                    <option>À vista</option>
+                    <option>Parcelado</option>
                 </select>
 
-                <label for="marca">Marca:</label>
-                <input type="text" id="marca" required />
+                <label>Marca:</label>
+                <input type="text" placeholder="Ex: Alphacaine">
 
-                <label for="valor">Valor (R$):</label>
-                <input type="number" id="valor" min="0" step="0.01" required />
+                <label>Valor (R$):</label>
+                <input type="number" step="0.01" placeholder="Ex: 5850.00">
 
-                <label for="descricao">Descrição:</label>
-                <textarea id="descricao" rows="3"></textarea>
+                <label>Fornecedor:</label>
+                <select>
+                    <option>Selecione o fornecedor...</option>
+                    <option>Fornecedor A</option>
+                    <option>Fornecedor B</option>
+                    <option>Fornecedor C</option>
+                </select>
 
-                <button type="submit"><i class="bi bi-box-seam"></i> Adicionar ao Estoque</button>
+                <label>Descrição:</label>
+                <textarea rows="3" placeholder="Descrição detalhada do produto"></textarea>
+
+                <div>
+                    <button type="submit" class="btn-salvar">Salvar</button>
+                    <button type="button" class="btn-cancelar">Cancelar</button>
+                </div>
             </form>
-
-            <table id="tabelaEstoque">
-                <tbody></tbody>
-            </table>
         </div>
     </div>
-
-    <script>
-        const form = document.getElementById('estoqueForm');
-        const tabela = document.querySelector('#tabelaEstoque tbody');
-        const successMsg = document.getElementById('successMsg');
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const item = {
-                nome: document.getElementById('nome').value,
-                quantidade: document.getElementById('quantidade').value,
-                formaPagamento: document.getElementById('formaPagamento').value,
-                marca: document.getElementById('marca').value,
-                valor: parseFloat(document.getElementById('valor').value).toFixed(2),
-                descricao: document.getElementById('descricao').value
-            };
-
-            const novaLinha = `
-                                <tr>
-                                    <td>${item.nome}</td>
-                                    <td>${item.quantidade}</td>
-                                    <td>${item.formaPagamento}</td>
-                                    <td>${item.marca}</td>
-                                    <td>R$ ${item.valor}</td>
-                                    <td>${item.descricao}</td>
-                                </tr>
-                            `;
-            tabela.insertAdjacentHTML('beforeend', novaLinha);
-
-            successMsg.style.display = 'block';
-            form.reset();
-
-            setTimeout(() => successMsg.style.display = 'none', 4000);
-        });
-    </script>
 </body>
 </html>
