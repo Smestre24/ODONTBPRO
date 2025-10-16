@@ -10,69 +10,57 @@
             <label for="msg">Insira aqui a mensagem automática/lembrete:</label>
             <textarea id="msg" class="message-box" placeholder="Digite sua mensagem..." @bind="Message" rows="6"></textarea>
 
-            <div class="checkbox-row">
-                <label for="selectAll">Selecionar todos os nomes ativos do banco de dados.</label>
+            <div class="checkbox-row">           
                 <input id="selectAll" type="checkbox" @bind="SelectAllEmails" />
+                <label for="selectAll">Selecionar todos os nomes ativos do banco de dados.</label>
                
             </div>
 
             <div class="actions">
-                <button class="btn"><i class="bi bi-box-seam"></i> ENVIAR</button>
-                
+                <button class="btn" @onclick="OnProceed">
+                    <i class="bi bi-box-seam"></i> ENVIAR
+                </button>
             </div>
 
             @if (!string.IsNullOrEmpty(Notification))
             {
-                <div class="notification @NotificationType">@Notification</div>
+                <p>@Notification</p>
             }
+
+        
+
         </div>
     </div>
 </div>
 
+    
 @code {
     private string Message { get; set; } = "";
     private bool SelectAllEmails { get; set; } = false;
-    private bool IsSending { get; set; } = false;
     private string Notification { get; set; } = "";
-    private string NotificationType { get; set; } = ""; 
 
 
-    private bool CanProceed => !string.IsNullOrWhiteSpace(Message);
+
 
     private async Task OnProceed()
     {
         Notification = "";
-        NotificationType = "";
 
-        if (!CanProceed)
+
+        if (string.IsNullOrWhiteSpace(Message))
         {
-            NotificationType = "error";
-            Notification = "Por favor, digite uma mensagem antes de prosseguir.";
+            Notification = "Digite uma mensagem antes de enviar.";
             return;
         }
 
-        IsSending = true;
-        try
-        {
-            
-            await Task.Delay(1000);
+        await Task.Delay(1000);
 
-           
-            NotificationType = "success";
-            Notification = SelectAllEmails
+
+
+        Notification = SelectAllEmails
                 ? "Mensagem pronta para envio a todos os e-mails ativos."
-                : "Mensagem salva. Selecione destinatários para enviar.";
+                : "Mensagem salva.";
 
-         
-        }
-        catch (Exception ex)
-        {
-            NotificationType = "error";
-            Notification = "Ocorreu um erro ao processar: " + ex.Message;
-        }
-        finally
-        {
-            IsSending = false;
-        }
+  
     }
 }

@@ -1,21 +1,32 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Projeto_Odontpro.Models
 {
     public class FinanceiroService
     {
-        private readonly List<Transacao> _transacoes = new();
+        private readonly ContasAPagarDAO _dao;
 
-        public void Adicionar(Transacao t)
+        public FinanceiroService(ContasAPagarDAO dao)
         {
-            _transacoes.Add(t);
+            _dao = dao;
         }
 
-        public IEnumerable<Transacao> Listar() => _transacoes;
+      
+        public List<ContasAPagar> Listar() => _dao.ListarTodos();
 
-        public decimal TotalGanhos() => _transacoes.Where(t => t.EhGanho).Sum(t => t.Valor);
-        public decimal TotalGastos() => _transacoes.Where(t => !t.EhGanho).Sum(t => t.Valor);
+       
+        public void Adicionar(ContasAPagar conta)
+        {
+            _dao.Inserir(conta);
+        }
+
+        public decimal TotalGastos() => _dao.ListarTodos().Sum(c => c.Valor);
+
+     
+        public decimal TotalGanhos() => 0;
+
         public decimal SaldoAtual() => TotalGanhos() - TotalGastos();
     }
 }
