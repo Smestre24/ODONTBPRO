@@ -12,13 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<Conexao>();
-
+builder.Services.AddSingleton<ContasAPagarDAO>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<FuncionarioService>();
 builder.Services.AddSingleton<PacienteService>();
 builder.Services.AddSingleton<FinanceiroService>();
 builder.Services.AddSingleton<FuncionarioService>();
+
 
 
 var app = builder.Build();
