@@ -19,7 +19,7 @@ builder.Services.AddScoped<FuncionarioService>();
 builder.Services.AddSingleton<PacienteService>();
 builder.Services.AddSingleton<FinanceiroService>();
 builder.Services.AddSingleton<FuncionarioService>();
-
+builder.Services.AddSingleton<FuncionarioDAO>();
 
 
 var app = builder.Build();
