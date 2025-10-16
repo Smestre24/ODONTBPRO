@@ -1,77 +1,68 @@
 ﻿@page "/AtendimentoCliente"
+@using System.Threading.Tasks
+@using Projeto_Odontpro.Models
+@using Projeto_Odontpro.Configs
 
-<div class="content">
-    <div class="topbar"></div>
-    <div class="user"></div>
+<div class="container">
+    <div class="card">
+      
+        <div class="card-header">ATENDIMENTO AO CLIENTE</div>
+        
+        <div class="card-body">
+            <label for="msg">Insira aqui a mensagem automática/lembrete:</label>
+            <textarea id="msg" class="message-box" placeholder="Digite sua mensagem..." @bind="Message" rows="6"></textarea>
 
-    <div class="modal">
-        <div class="modal-header">ATENDIMENTO AO CLIENTE</div>
-        <div class="modal-content">
-
-            <label for="mensagem">Insira aqui a mensagem automática/lembrete:</label><br><br>
-            <textarea id="mensagem" @bind="Mensagem" placeholder="Digite sua mensagem..."></textarea>
-
-            <div class="checkbox">
-                <input type="checkbox" id="selecionar" @bind="SelecionarTodos" @onchange="SelecionarTodosEmails">
-                <label for="selecionar">&nbsp;Selecionar todos os e-mails ativos do banco de dados.</label>
+            <div class="checkbox-row">           
+                <input id="selectAll" type="checkbox" @bind="SelectAllEmails" />
+                <label for="selectAll">Selecionar todos os nomes ativos do banco de dados.</label>
+               
             </div>
 
-            <div class="emails-list">
-                @if (Clientes?.Any() == true)
-                {
-                    @foreach (var cliente in Clientes)
-                    {
-                        <div>
-                            <input type="checkbox" @bind="cliente.Selecionado" />
-                            <label>@cliente.Nome (@cliente.Email)</label>
-                        </div>
-                    }
-                }
-                else
-                {
-                    <p>Nenhum cliente encontrado.</p>
-                }
+            <div class="actions">
+                <button class="btn" @onclick="OnProceed">
+                    <i class="bi bi-box-seam"></i> ENVIAR
+                </button>
             </div>
 
-            <button class="prosseguir" @onclick="EnviarMensagem">PROSSEGUIR</button>
+            @if (!string.IsNullOrEmpty(Notification))
+            {
+                <p>@Notification</p>
+            }
+
+        
+
         </div>
     </div>
 </div>
 
+    
 @code {
-    private string Mensagem { get; set; } = string.Empty;
-    private bool SelecionarTodos { get; set; }
-    private List<ClienteSelecionado> Clientes { get; set; } = new();
+    private string Message { get; set; } = "";
+    private bool SelectAllEmails { get; set; } = false;
+    private string Notification { get; set; } = "";
 
-    protected override void OnInitialized()
+
+
+
+    private async Task OnProceed()
     {
-        // Exemplo de dados fixos (sem banco, só para testar a tela)
-        Clientes = new()
+        Notification = "";
+
+
+        if (string.IsNullOrWhiteSpace(Message))
         {
-            new ClienteSelecionado { Id = 1, Nome = "João Silva", Email = "joao@email.com" },
-            new ClienteSelecionado { Id = 2, Nome = "Maria Souza", Email = "maria@email.com" }
-        };
-    }
+            Notification = "Digite uma mensagem antes de enviar.";
+            return;
+        }
 
-    private void SelecionarTodosEmails(ChangeEventArgs e)
-    {
-        foreach (var cliente in Clientes)
-            cliente.Selecionado = SelecionarTodos;
-    }
+        await Task.Delay(1000);
 
-    private void EnviarMensagem()
-    {
-        var selecionados = Clientes.Where(c => c.Selecionado).ToList();
-        Console.WriteLine($"Mensagem: {Mensagem}");
-        foreach (var c in selecionados)
-            Console.WriteLine($"Enviando para {c.Email}");
-    }
 
-    public class ClienteSelecionado
-    {
-        public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Email { get; set; }
-        public bool Selecionado { get; set; }
+
+        Notification = SelectAllEmails
+                ? "Mensagem pronta para envio a todos os e-mails ativos."
+                : "Mensagem salva.";
+
+  
     }
 }

@@ -1,74 +1,84 @@
-﻿@* @page "/pacientes"
+﻿@page "/ListaPacientes"
 @using Projeto_Odontpro.Models
+@using Projeto_Odontpro.Services
+@using Projeto_Odontpro.Components
 @inject PacienteService PacienteService
+@inject NavigationManager NavigationManager
 
 <h3>Pacientes</h3>
 
-<div class="card">
-    <div class="card-header">
-        <strong>Lista de Pacientes</strong>
-    </div>
-    <div class="card-body">
-        <input type="text" placeholder="Pesquisar..." @bind="filtro" class="form-control mb-2" />
-
-        <table class="table table-striped table-hover">
-            <thead>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Sexo</th>
+            <th>Nascimento</th>
+            <th>Estado</th>
+            <th>Endereço</th>
+            <th>Observações</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (pacientes == null)
+        {
+            <tr><td colspan="10">Carregando...</td></tr>
+        }
+        else if (pacientes.Count == 0)
+        {
+            <tr><td colspan="10">Nenhum paciente cadastrado.</td></tr>
+        }
+        else
+        {
+            @foreach (var paciente in pacientes)
+            {
                 <tr>
-                    <th>Código</th>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Telefone</th>
-                    <th>Cidade</th>
-                    <th>Ações</th>
+                    <td>@paciente.Id</td>
+                    <td>@paciente.Nome</td>
+                    <td>@paciente.Email</td>
+                    <td>@paciente.Telefone</td>
+                    <td>@paciente.Sexo</td>
+                    <td>@paciente.Nascimento.ToShortDateString()</td>
+                    <td>@paciente.Estado</td>
+                    <td>@paciente.Endereco</td>
+                    <td>@paciente.Observacoes</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="() => EditarCliente(paciente.Id)">Editar</button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => ExcluirCliente(paciente.Id)">Excluir</button>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var paciente in pacientesFiltrados)
-                {
-                    <tr>
-                        <td>@paciente.Id</td>
-                        <td>@paciente.Nome</td>
-                        <td>@paciente.CPF</td>
-                        <td>@paciente.Telefone</td>
-                        <td>@paciente.Cidade</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" @onclick="() => Editar(paciente.Id)">Alterar</button>
-                            <button class="btn btn-sm btn-danger" @onclick="() => Apagar(paciente.Id)">Apagar</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            }
+        }
+    </tbody>
+</table>
 
-        <button class="btn btn-success" @onclick="Adicionar">Adicionar</button>
-    </div>
-</div>
+<NavLink class="btn btn-primary" href="/cadastrodepaciente">Adicionar Cliente</NavLink>
+<NavLink class="btn btn-secondary" href="/">Sair</NavLink>
 
 @code {
-    private string filtro = string.Empty;
-    private List<Pacientes> pacientes = new();
-    public IEnumerable<Pacientes> pacientesFiltrados =>
-        pacientes.Where(p => string.IsNullOrEmpty(filtro) || p.Nome.Contains(filtro, StringComparison.OrdinalIgnoreCase));
-        
+    private List<Paciente> pacientes = new();
 
-     protected override async Task OnInitializedAsync()
-     {
-        pacientes = await PacienteService.GetPacientesAsync();
-     }
-
-     private void Adicionar()
-     {
-        // Lógica para abrir modal ou navegar para tela de cadastro
-     }
-
-    private void Editar(int id)
+    protected override async Task OnInitializedAsync()
     {
-        // Lógica para editar paciente
+        pacientes = await PacienteService.ObterTodos();
     }
 
-    private void Apagar(int id)
+    private void EditarCliente(int id)
     {
-        pacientes.RemoveAll(p => p.Id == id);
+        NavigationManager.NavigateTo($"/editarcliente/{id}");
+    }
+
+    private async Task ExcluirCliente(int id)
+    {
+        await PacienteService.Excluir(id);
+        pacientes = await PacienteService.ObterTodos();
+    }
+
+    private void Sair()
+    {
+        NavigationManager.NavigateTo("/");
     }
 }
- *@

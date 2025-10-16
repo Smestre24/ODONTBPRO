@@ -1,6 +1,8 @@
 ﻿@page "/contasApagar"
 @inject Projeto_Odontpro.Models.FinanceiroService Financeiro
 
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +11,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #d0ebff; 
+            background-color: #d0ebff;
             margin: 0;
             padding: 0;
         }
@@ -24,13 +26,11 @@
             max-width: 800px;
         }
 
-     
         h2, h3 {
             text-align: center;
             color: #004d66;
         }
 
-        
         .resumo {
             display: flex;
             justify-content: space-around;
@@ -47,7 +47,7 @@
                 font-size: 18px;
                 padding: 10px 15px;
                 border-radius: 10px;
-                background-color: #e6f7ff; 
+                background-color: #e6f7ff;
                 box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             }
 
@@ -64,7 +64,6 @@
             color: #fff;
         }
 
-       
         .filtros {
             display: flex;
             justify-content: center;
@@ -77,7 +76,6 @@
             border-radius: 5px;
         }
 
-        
         .form-container {
             margin-top: 20px;
         }
@@ -121,11 +119,27 @@
             display: none;
             margin-top: 10px;
         }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #004d66;
+            color: white;
+        }
     </style>
 </head>
 
 <body>
-
     <div class="container">
         <h2>RESUMO FINANCEIRO</h2>
 
@@ -135,110 +149,133 @@
             <div class="saldo">Saldo Atual: <strong id="saldoAtual">R$ 0,00</strong></div>
         </div>
 
-        <div class="filtros">
-            <select id="mesSelect">
-                <option value="0">Janeiro</option>
-                <option value="1">Fevereiro</option>
-                <option value="2">Março</option>
-                <option value="3">Abril</option>
-                <option value="4">Maio</option>
-                <option value="5">Junho</option>
-                <option value="6">Julho</option>
-                <option value="7">Agosto</option>
-                <option value="8">Setembro</option>
-                <option value="9">Outubro</option>
-                <option value="10">Novembro</option>
-                <option value="11">Dezembro</option>
-            </select>
-            <select id="anoSelect">
-                <option>2024</option>
-                <option selected>2025</option>
-                <option>2026</option>
-            </select>
-        </div>
+       
 
         <div class="form-container">
-            <h3>Adicionar Novo Gasto</h3>
-
-            <div class="form-group">
-                <label for="codigo">Código:</label>
-                <input type="text" id="codigo" placeholder="">
-            </div>
-
-            <div class="form-group">
-                <label for="nomePagador">Nome do Pagador:</label>
-                <input type="text" id="nomePagador" placeholder="">
-            </div>
-
-            <div class="form-group">
-                <label for="descricao">Descrição:</label>
-                <input type="text" id="descricao" placeholder="">
-            </div>
-
-            <div class="form-group">
-                <label for="valor">Valor:</label>
-                <input type="number" id="valor" placeholder="">
-            </div>
-
-            <div class="form-group">
-                <label for="categoria">Categoria:</label>
-                <input type="text" id="categoria" placeholder="">
-            </div>
-
-            <div class="form-actions">
-                <button id="btnAdicionarGasto">Adicionar Gasto</button>
-                <button id="btnAdicionarGanho"><i class="bi bi-plus-circle"></i> Adicionar Ganho</button>
-            </div>
-
+            <h3>Adicionar Transação</h3>
+            <form id="transacaoForm">
+                <div class="form-group">
+                    <label for="pagador">Nome do Pagador:</label>
+                    <input type="text" id="pagador" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="valor">Valor:</label>
+                    <input type="number" id="valor" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição:</label>
+                    <input type="text" id="descricao" placeholder="">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="btnAdicionarGasto">Adicionar Gasto</button>
+                    <button type="button" id="btnAdicionarGanho"><i class="bi bi-plus-circle"></i> Adicionar Ganho</button>
+                </div>
+            </form>
             <p class="msg" id="mensagem">Operação realizada com sucesso!</p>
         </div>
+
+        <table id="tabelaTransacoes">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Nome do Pagador</th>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 
     <script>
+        const transacaoForm = document.getElementById('transacaoForm');
+        const tabelaTransacoes = document.querySelector('#tabelaTransacoes tbody');
+        const msgTransacao = document.getElementById('mensagem');
         const ganhosMes = document.getElementById('ganhosMes');
         const gastosMes = document.getElementById('gastosMes');
         const saldoAtual = document.getElementById('saldoAtual');
-        const msg = document.getElementById('mensagem');
+
         let transacoes = [];
 
-        function atualizarResumo() {
+        function atualizarTabelaEResumo(transacao) {
+            const novaLinha = `
+                        <tr>
+                            <td>${transacao.data}</td>
+                            <td>${transacao.pagador}</td>
+                            <td>${transacao.descricao}</td>
+                            <td>${transacao.tipo}</td>
+                            <td>R$ ${transacao.valor.toFixed(2)}</td>
+                        </tr>
+                    `;
+            tabelaTransacoes.insertAdjacentHTML('beforeend', novaLinha);
+
             const ganhos = transacoes.filter(t => t.tipo === 'ganho').reduce((acc, cur) => acc + cur.valor, 0);
             const gastos = transacoes.filter(t => t.tipo === 'gasto').reduce((acc, cur) => acc + cur.valor, 0);
             const saldo = ganhos - gastos;
+
             ganhosMes.textContent = ganhos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             gastosMes.textContent = gastos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             saldoAtual.textContent = saldo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            msgTransacao.textContent = transacao.tipo === 'ganho' ? "Ganho adicionado!" : "Gasto adicionado!";
+            msgTransacao.style.color = "green";
+            msgTransacao.style.display = "block";
+            setTimeout(() => msgTransacao.style.display = "none", 3000);
         }
 
-        function mostrarMensagem(texto, cor = 'green') {
-            msg.textContent = texto;
-            msg.style.color = cor;
-            msg.style.display = 'block';
-            setTimeout(() => msg.style.display = 'none', 3000);
-        }
-
-        document.getElementById('btnAdicionarGasto').addEventListener('click', () => {
+       
+        transacaoForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const pagador = document.getElementById('pagador').value;
             const descricao = document.getElementById('descricao').value;
-            const categoria = document.getElementById('categoria').value;
             const valor = parseFloat(document.getElementById('valor').value);
-            if (descricao && categoria && !isNaN(valor)) {
-                transacoes.push({ data: new Date().toLocaleDateString(), descricao, categoria, valor, tipo: 'gasto' });
-                atualizarResumo();
-                mostrarMensagem("Gasto adicionado!");
-            } else {
-                mostrarMensagem("Preencha todos os campos corretamente!", "red");
+
+            if (!pagador || !descricao || isNaN(valor)) {
+                msgTransacao.textContent = "Preencha todos os campos corretamente!";
+                msgTransacao.style.color = "red";
+                msgTransacao.style.display = "block";
+                setTimeout(() => msgTransacao.style.display = "none", 3000);
+                return;
             }
+
+            const transacao = {
+                data: new Date().toLocaleDateString(),
+                pagador,
+                descricao,
+                valor,
+                tipo: 'gasto'
+            };
+            transacoes.push(transacao);
+            atualizarTabelaEResumo(transacao);
+            transacaoForm.reset();
         });
 
+       
         document.getElementById('btnAdicionarGanho').addEventListener('click', () => {
-            const descricao = prompt("Descrição do ganho:");
-            const valor = parseFloat(prompt("Valor do ganho:"));
-            if (descricao && !isNaN(valor)) {
-                transacoes.push({ data: new Date().toLocaleDateString(), descricao, categoria: 'Ganho', valor, tipo: 'ganho' });
-                atualizarResumo();
-                mostrarMensagem("Ganho adicionado!");
+            const pagador = document.getElementById('pagador').value;
+            const descricao = document.getElementById('descricao').value;
+            const valor = parseFloat(document.getElementById('valor').value);
+
+            if (!pagador || !descricao || isNaN(valor)) {
+                msgTransacao.textContent = "Preencha todos os campos corretamente!";
+                msgTransacao.style.color = "red";
+                msgTransacao.style.display = "block";
+                setTimeout(() => msgTransacao.style.display = "none", 3000);
+                return;
             }
+
+            const transacao = {
+                data: new Date().toLocaleDateString(),
+                pagador,
+                descricao,
+                valor,
+                tipo: 'ganho'
+            };
+            transacoes.push(transacao);
+            atualizarTabelaEResumo(transacao);
+            transacaoForm.reset();
         });
     </script>
-
 </body>
+</html>

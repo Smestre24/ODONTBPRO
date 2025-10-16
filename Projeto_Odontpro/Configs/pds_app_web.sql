@@ -1,5 +1,27 @@
-create database pds_app_web;
-use pds_app_web;
+create database odontpro;
+use odontpro;
+
+CREATE TABLE funcionarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20),
+    cargo VARCHAR(50),
+    estado varchar(50)
+);
+
+CREATE TABLE clientes (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    Nome VARCHAR(255) NOT NULL,
+    Email VARCHAR(255),
+    Sexo varchar(30),
+    Telefone VARCHAR(20),
+    Endereco VARCHAR(30),
+    Nascimento datetime,
+    Estado varchar(40),
+    Observacoes varchar (300)
+);
+
 
 CREATE TABLE
   fornecedor (
@@ -33,19 +55,6 @@ CREATE TABLE
     PRIMARY KEY (id_est),
     FOREIGN KEY (id_for_fk) REFERENCES fornecedor (id_for)
   );
-
-  CREATE TABLE Clientes (
-    Id INT PRIMARY KEY auto_increment,
-    Nome VARCHAR(100) NOT NULL,
-    Email VARCHAR(150) NOT NULL,
-    Ativo INT NOT NULL DEFAULT 1
-);
-
-
-INSERT INTO Clientes (Nome, Email, Ativo) VALUES
-('João Silva', 'joao@email.com', 1),
-('Maria Souza', 'maria@email.com', 1),
-('Carlos Lima', 'carlos@email.com', 0);
 
 -- Inserindo fornecedores
 INSERT INTO
@@ -211,3 +220,68 @@ VALUES
     500.00,
     'Espelho Odontológico Golgran'
   );
+  
+  
+INSERT INTO clientes (Nome, Email, Sexo, Telefone, Endereco, Nascimento, Estado, Observacoes) VALUES
+('Maria Silva', 'maria.silva@email.com', 'Feminino', '11999999999', 'Rua das Flores, 123', '1995-06-15 00:00:00', 'São Paulo', 'Cliente fiel, prefere atendimento pela manhã'),
+('João Santos', 'joao.santos@email.com', 'Masculino', '21988888888', 'Av. Brasil, 456', '1988-09-22 00:00:00', 'Rio de Janeiro', 'Solicitou agendamento mensalmente'),
+('Ana Oliveira', 'ana.oliveira@email.com', 'Feminino', '31977777777', 'Rua Central, 789', '2000-01-10 00:00:00', 'Minas Gerais', 'Possui alergia a anestesia local'),
+('Carlos Pereira', 'carlos.pereira@email.com', 'Masculino', '41966666666', 'Av. das Américas, 321', '1992-03-05 00:00:00', 'Paraná', 'Primeira consulta realizada em 2024');
+
+INSERT INTO funcionarios (nome, email, telefone, cargo, estado) VALUES
+('Ana Souza', 'ana.souza@email.com', '(11) 98765-4321', 'Recepcionista','rj'),
+('Carlos Lima', 'carlos.lima@email.com', '(21) 91234-5678', 'Dentista','sp'),
+('Mariana Silva', 'mariana.silva@email.com', '(31) 99876-5432', 'Auxiliar','ro'),
+('João Pereira', 'joao.pereira@email.com', '(41) 99123-4567', 'Gerente','mg'),
+('Fernanda Costa', 'fernanda.costa@email.com', '(51) 98765-1234', 'Assistente Administrativo','ms');
+
+CREATE TABLE contasaApagar (
+<<<<<<< HEAD
+   
+=======
+    
+>>>>>>> b93fed8f4d3f1c885ccbfaafdceb29718c036f70
+    nomecp_cont VARCHAR(100),
+    valorcp_est DECIMAL(10,2),
+<<<<<<< HEAD
+    descricaocp_est VARCHAR(255),
+=======
+>>>>>>> b93fed8f4d3f1c885ccbfaafdceb29718c036f70
+    
+);
+ INSERT INTO
+  contasaApagar (
+
+<<<<<<< HEAD
+   
+    nomecp_cont,
+    valorcp_est,
+	descricaocp_est
+    
+    
+  )
+VALUES
+  (
+    
+    'Maria Isabeli',
+     1200,
+    'Aluguel',
+
+   
+    )
+   
+    
+=======
+    
+    nomecp_cont,
+	descricaocp_est,
+    valorcp_est
+   
+  )
+VALUES
+    ('Maria Isabeli', 'Aluguel mês 12', 1200),
+    ('Ana Carolina', 'Conta de luz', 250.75),
+    ('Sara Silva', 'Internet', 150.50),
+    ('Anna Clara', 'Limpeza dental', 400.90),
+    ('Douglas', 'Aparelho ', 180.00);
+>>>>>>> b93fed8f4d3f1c885ccbfaafdceb29718c036f70
