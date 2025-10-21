@@ -1,7 +1,6 @@
 ﻿using Projeto_Odontpro.Models;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
-using Projeto_Odontpro.Models;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
