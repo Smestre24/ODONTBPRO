@@ -1,10 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
-using Projeto_Odontpro.Models;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace Projeto_Odontpro.Services
+namespace Projeto_Odontpro.Models
 {
     public class FuncionarioDAO
     {
