@@ -16,7 +16,7 @@ namespace Projeto_Odontpro.Services
 
         public PacienteService(IConfiguration configuration)
         {
-            connectionString = configuration.GetConnectionString("DefaultConnection");
+            connectionString = configuration.GetConnectionString("MySqlConnection");
         }
 
         public async Task<List<Paciente>> ObterTodos()
