@@ -1,12 +1,25 @@
-﻿@page "/AtendimentoCliente"
-@using System.Threading.Tasks
+﻿@page "/AtendimentoPaciente"
+@rendermode InteractiveServer
+
+
 @using Projeto_Odontpro.Models
-@using Projeto_Odontpro.Configs
+@inject AtendimetoPacienteDAO atendimentoDAO;
+@inject NavigationManager Navigaton;
+
+<PageTitle>Atendimento ao Paciente</PageTitle>
+
+@if (erro != string.Empty)
+{
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+        <strong class="font-bold">Erro!</strong>
+        <span class="block sm:inline">@erro</span>
+    </div>
+}
 
 <div class="container">
     <div class="card">
       
-        <div class="card-header">ATENDIMENTO AO CLIENTE</div>
+        <div class="card-header">ATENDIMENTO AO PACIENTE</div>
         
         <div class="card-body">
             <label for="msg">Insira aqui a mensagem automática/lembrete:</label>
@@ -37,6 +50,8 @@
 
     
 @code {
+
+    private string erro = string.Empty;
     private string Message { get; set; } = "";
     private bool SelectAllEmails { get; set; } = false;
     private string Notification { get; set; } = "";
@@ -44,25 +59,10 @@
 
 
 
-    private async Task OnProceed()
+    protected override void OnInitialized()
     {
-        Notification = "";
-
-
-        if (string.IsNullOrWhiteSpace(Message))
-        {
-            Notification = "Digite uma mensagem antes de enviar.";
-            return;
-        }
-
-        await Task.Delay(1000);
-
-
-
-        Notification = SelectAllEmails
-                ? "Mensagem pronta para envio a todos os e-mails ativos."
-                : "Mensagem salva.";
-
-  
     }
+
+
+
 }
