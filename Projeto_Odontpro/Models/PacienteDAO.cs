@@ -1,4 +1,5 @@
-﻿using Projeto_Odontpro.Configs;
+﻿
+using Projeto_Odontpro.Configs;
 
 namespace Projeto_Odontpro.Models
 {
