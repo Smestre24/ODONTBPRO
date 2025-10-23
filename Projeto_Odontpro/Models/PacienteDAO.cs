@@ -1,9 +1,7 @@
-<<<<<<< HEAD
-﻿using Projeto_Odontpro.Configs;
-=======
-﻿
+
+﻿using Projeto_Odontpro.Configs;﻿
 using Projeto_Odontpro.Configs;
->>>>>>> 55a8fe03f9dbd34e0eed966cdd06449e5fb331c6
+
 
 namespace Projeto_Odontpro.Models
 {

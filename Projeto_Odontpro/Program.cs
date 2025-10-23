@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<Conexao>();
+builder.Services.AddScoped<AtendimetoPacienteDAO>();
 builder.Services.AddSingleton<ContasAPagarDAO>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
