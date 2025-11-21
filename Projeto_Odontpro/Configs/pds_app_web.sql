@@ -236,24 +236,20 @@ INSERT INTO funcionarios (nome, email, telefone, cargo, estado) VALUES
 ('Fernanda Costa', 'fernanda.costa@email.com', '(51) 98765-1234', 'Assistente Administrativo','ms');
 
 CREATE TABLE contasaApagar (
-    
     nomecp_cont VARCHAR(100),
     descricaocp_est VARCHAR(255),
-    valorcp_est DECIMAL(10,2),
-    
+    valorcp_est DECIMAL(10,2)
 );
- INSERT INTO
-  contasaApagar (
 
-    
+INSERT INTO contasaApagar (
     nomecp_cont,
-	descricaocp_est,
+    descricaocp_est,
     valorcp_est
-   
-  )
+)
 VALUES
-    ('Maria Isabeli', 'Aluguel mês 12', 1200),
+    ('Maria Isabeli', 'Aluguel mês 12', 1200.00),
     ('Ana Carolina', 'Conta de luz', 250.75),
     ('Sara Silva', 'Internet', 150.50),
     ('Anna Clara', 'Limpeza dental', 400.90),
-    ('Douglas', 'Aparelho ', 180.00);
+    ('Douglas', 'Aparelho', 180.00);
+

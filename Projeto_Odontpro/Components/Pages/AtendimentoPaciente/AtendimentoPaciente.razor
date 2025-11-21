@@ -1,0 +1,68 @@
+﻿@page "/AtendimentoPaciente"
+@rendermode InteractiveServer
+
+
+@using Projeto_Odontpro.Models
+@inject AtendimetoPacienteDAO atendimentoDAO;
+@inject NavigationManager Navigaton;
+
+<PageTitle>Atendimento ao Paciente</PageTitle>
+
+@if (erro != string.Empty)
+{
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+        <strong class="font-bold">Erro!</strong>
+        <span class="block sm:inline">@erro</span>
+    </div>
+}
+
+<div class="container">
+    <div class="card">
+      
+        <div class="card-header">ATENDIMENTO AO PACIENTE</div>
+        
+        <div class="card-body">
+            <label for="msg">Insira aqui a mensagem automática/lembrete:</label>
+            <textarea id="msg" class="message-box" placeholder="Digite sua mensagem..." @bind="Message" rows="6"></textarea>
+
+            <div class="checkbox-row">           
+                <input id="selectAll" type="checkbox" @bind="SelectAllEmails" />
+                <label for="selectAll">Selecionar todos os nomes ativos do banco de dados.</label>
+               
+            </div>
+
+            <div class="actions">
+                <button class="btn" @onclick="OnProceed">
+                    <i class="bi bi-box-seam"></i> ENVIAR
+                </button>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Notification))
+            {
+                <p>@Notification</p>
+            }
+
+        
+
+        </div>
+    </div>
+</div>
+
+    
+@code {
+
+    private string erro = string.Empty;
+    private string Message { get; set; } = "";
+    private bool SelectAllEmails { get; set; } = false;
+    private string Notification { get; set; } = "";
+
+
+
+
+    protected override void OnInitialized()
+    {
+    }
+
+
+
+}

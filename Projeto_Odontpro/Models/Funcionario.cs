@@ -11,5 +11,8 @@ namespace Projeto_Odontpro.Models
         public string Telefone { get; set; }
         public string Cargo { get; set; }
         public string Estado { get; set; }
+        public DateTime Nascimento { get; set; }
+        public string Endereco { get; set; }
+        public string Observacoes { get; set; }
     }
 }

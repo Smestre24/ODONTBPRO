@@ -1,0 +1,84 @@
+﻿@page "/ListaPacientes"
+@using Projeto_Odontpro.Models
+@using Projeto_Odontpro.Services
+@using Projeto_Odontpro.Components
+@inject PacienteService PacienteService
+@inject NavigationManager NavigationManager
+
+<h3>Pacientes</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Sexo</th>
+            <th>Nascimento</th>
+            <th>Estado</th>
+            <th>Endereço</th>
+            <th>Observações</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (pacientes == null)
+        {
+            <tr><td colspan="10">Carregando...</td></tr>
+        }
+        else if (pacientes.Count == 0)
+        {
+            <tr><td colspan="10">Nenhum paciente cadastrado.</td></tr>
+        }
+        else
+        {
+            @foreach (var paciente in pacientes)
+            {
+                <tr>
+                    <td>@paciente.Id</td>
+                    <td>@paciente.Nome</td>
+                    <td>@paciente.Email</td>
+                    <td>@paciente.Telefone</td>
+                    <td>@paciente.Sexo</td>
+                    <td>@paciente.Nascimento.ToShortDateString()</td>
+                    <td>@paciente.Estado</td>
+                    <td>@paciente.Endereco</td>
+                    <td>@paciente.Observacoes</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="() => EditarCliente(paciente.Id)">Editar</button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => ExcluirCliente(paciente.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<NavLink class="btn btn-primary" href="/cadastrodepaciente">Adicionar Cliente</NavLink>
+<NavLink class="btn btn-secondary" href="/">Sair</NavLink>
+
+@code {
+    private List<Paciente> pacientes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        pacientes = await PacienteService.ObterTodos();
+    }
+
+    private void EditarCliente(int id)
+    {
+        NavigationManager.NavigateTo($"/editarcliente/{id}");
+    }
+
+    private async Task ExcluirCliente(int id)
+    {
+        await PacienteService.Excluir(id);
+        pacientes = await PacienteService.ObterTodos();
+    }
+
+    private void Sair()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+}

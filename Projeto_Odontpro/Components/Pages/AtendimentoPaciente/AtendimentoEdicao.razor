@@ -1,0 +1,83 @@
+﻿@page "/AtendimentoPaciente/{Id:int}/editar"
+@rendermode InteractiveServer
+
+@using Projeto_Odontpro.Models
+@inject AtendimetoPacienteDAO atendimentoDAO;
+@inject NavigationManager Navigation;
+
+<PageTitle>Atendimento ao Paciente</PageTitle>
+
+@if (erro != string.Empty)
+{
+  <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+    <strong class="font-bold">Erro!</strong>
+    <span class="block sm:inline">@erro</span>
+  </div>
+}
+
+<EditForm Model="Atedimento" OnSubmit="Salvar">
+  <div class="mb-4">
+    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+    <input @bind-value="Atendimento.Email" type="text" id="email"
+      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
+  </div>
+
+  <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Salvar</button>
+</EditForm>
+
+
+
+@code {
+
+  private string erro = string.Empty;
+
+  [Parameter]
+  public int Id { get; set; }
+
+  [SupplyParameterFromForm]
+  private Paciente Atendimento { get; set; } = new();
+
+  protected override void OnInitialized()
+  {
+    var _atendimento = atendimentoDAO.BuscarPorId(Id);
+
+    if (_atendimento != null)
+    {
+      Atendimento = _atendimento;
+    }
+    else
+    {
+      erro = "Atendimento não encontrado.";
+    }
+  }
+
+  private void Salvar()
+  {
+    try
+    {
+      atendimentoDAO.Atualizar(Atendimento);
+
+      Navigation.NavigateTo("/AtedimentoPaciente");
+    }
+    catch (Exception ex)
+    {
+      erro = $"Erro ao salvar o Atedimento: {ex.Message}";
+    }
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
