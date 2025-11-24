@@ -1,4 +1,4 @@
-﻿namespace Projeto_Odontpro.Models
+﻿namespace Projeto_Odontpro.Models.Paciente
 {
     public class Paciente
     {

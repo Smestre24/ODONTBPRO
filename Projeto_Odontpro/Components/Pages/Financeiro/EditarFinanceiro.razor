@@ -1,0 +1,166 @@
+﻿@page "/financeiro/editar/{Id:int}"
+@using Projeto_Odontpro.Models.Financeiro
+@inject FinanceiroDAO financeiro
+@inject NavigationManager nav
+
+@rendermode InteractiveServer
+
+<h2>Editar Transação</h2>
+
+@if (TransacaoAtual == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+
+
+    <div class="form-container">
+        <h3>Alterar Dados</h3>
+
+        <div class="form-group">
+            <label>Nome do Pagador:</label>
+            <input type="text" @bind="TransacaoAtual.Nome_Pagador" />
+        </div>
+
+        <div class="form-group">
+            <label>Valor:</label>
+            <input type="number" step="0.01" @bind="TransacaoAtual.Valor" />
+        </div>
+
+        <div class="form-group">
+            <label>Descrição:</label>
+            <input type="text" @bind="TransacaoAtual.Descricao" />
+        </div>
+
+        <div class="form-group">
+            <label>Tipo:</label>
+            <select @bind="TransacaoAtual.Tipo">
+                <option value="ganho">Ganho</option>
+                <option value="gasto">Gasto</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-salvar" @onclick="SalvarAlteracoes">Salvar Alterações</button>
+            <button class="btn-voltar" @onclick="@(() => nav.NavigateTo("/financeiro"))">Cancelar</button>
+        </div>
+        @* mostra menssagens *@
+        @if (!string.IsNullOrEmpty(Mensagem))
+        {
+            <p class="msg" style="color: @MensagemCor">@Mensagem</p>
+        }
+    </div>
+}
+
+@code {
+    //serve para pegar o parametro que é passado na url: @page /financeiro/editar/{Id:int} ----> esse {Id:int} no caso
+
+    [Parameter] public int Id { get; set; }
+
+    Transacao? TransacaoAtual;
+    string Mensagem = "";
+    string MensagemCor = "green";
+
+    protected override void OnInitialized()
+    {
+        // em casos de editar e mostrar, sempre é mostrado todos os dados ao carregar a pagina, o buscar id faz isso, ele faz um select
+        //com um where no bd e retorna apenas a trasanção com o id igual o id que é passado na url
+        TransacaoAtual = financeiro.BuscarPorId(Id);
+
+        if (TransacaoAtual == null)
+        {
+            Mensagem = "Transação não encontrada.";
+            MensagemCor = "red";
+        }
+    }
+
+    private void SalvarAlteracoes()
+    {
+        try
+        {
+            //evita erros de tentar salvar com os dados mau carregados
+            if (TransacaoAtual == null) return;
+
+            bool ok = financeiro.Editar(TransacaoAtual);
+
+            if (ok)
+            {
+                Mensagem = "Alterações salvas com sucesso!";
+                MensagemCor = "green";
+
+                nav.NavigateTo("/financeiro");
+             
+            }
+            else
+            {
+                Mensagem = "Falha ao salvar alterações.";
+                MensagemCor = "red";
+            }
+        }
+        catch (Exception ex)
+        {
+            Mensagem = "Erro ao salvar.";
+            MensagemCor = "red";
+            Console.WriteLine(ex);
+        }
+    }
+}
+<style>
+    h2, h3 {
+        text-align: center;
+        color: #004d66;
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 25px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-salvar {
+        background: #28a745;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        width: 50%;
+        cursor: pointer;
+    }
+
+    .btn-voltar {
+        background: #6c757d;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        width: 50%;
+        cursor: pointer;
+    }
+
+    .msg {
+        text-align: center;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+</style>

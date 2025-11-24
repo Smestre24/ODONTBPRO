@@ -1,0 +1,320 @@
+﻿@page "/financeiro"
+@using Projeto_Odontpro.Models.Financeiro
+@inject Projeto_Odontpro.Models.Financeiro.FinanceiroDAO financeiro
+
+@rendermode InteractiveServer
+
+
+@code {
+    List<Transacao> Transacoes = new();
+    Transacao NovaTransacao = new Transacao();
+
+    string Mensagem = "";
+    string MensagemCor = "green";
+
+    decimal GanhosMes => Transacoes.Where(t => t.Tipo == "ganho").Sum(t => t.Valor);
+    decimal GastosMes => Transacoes.Where(t => t.Tipo == "gasto").Sum(t => t.Valor);
+    decimal SaldoAtual => GanhosMes - GastosMes;
+
+    //metodo que carrega a lista ao iniciar(obs: utiliza-se essa nomeclatura para o nome)
+    protected override void OnInitialized()
+    {
+        CarregarTransacoes();
+    }
+
+    private void CarregarTransacoes()
+    {
+        // Carrega do DAO
+        Transacoes = financeiro.ListarTodos() ?? new List<Transacao>();
+        StateHasChanged();
+    }
+
+
+    //validador para checar se os campos estao preechidos
+    private void ValidarNovaTransacao()
+    {
+        if (string.IsNullOrWhiteSpace(NovaTransacao.Nome_Pagador))
+            throw new ArgumentException("Nome do pagador é obrigatório.");
+
+        if (NovaTransacao.Valor <= 0)
+            throw new ArgumentException("Valor deve ser maior que zero.");
+    }
+
+    private void SalvarTransacao(string tipo)
+    {
+        try
+        {
+            ValidarNovaTransacao();
+
+            NovaTransacao.Tipo = tipo;
+            NovaTransacao.Data = DateTime.Now;
+
+            financeiro.AdicionarTransacao(NovaTransacao);
+
+            Mensagem = tipo == "ganho" ? "Ganho adicionado!" : "Gasto adicionado!";
+            MensagemCor = "green";
+
+            // reset form e recarrega lista
+            NovaTransacao = new Transacao();
+            CarregarTransacoes();
+        }
+        catch (ArgumentException aex)
+        {
+            Mensagem = aex.Message;
+            MensagemCor = "red";
+        }
+        catch (Exception ex)
+        {
+            Mensagem = "Erro ao salvar transação.";
+            MensagemCor = "red";
+            Console.WriteLine(ex);
+        }
+    }
+   
+
+    private void ExcluirTransacao(int id)
+    {
+        try
+        {            
+            bool retorno =  financeiro.Excluir(id);
+
+            //logica para verificar se a excluisao funcionou
+            if(retorno)
+            {
+                Mensagem = "Transação excluída.";
+                MensagemCor = "green";
+            }
+            else
+            {
+                 Mensagem = "Falha ao excluir tranzação! tente novamente.";
+                MensagemCor = "red";
+            }
+
+            // Atualizar a lista
+            CarregarTransacoes();
+        }
+        catch (Exception ex)
+        {
+            Mensagem = "Erro ao excluir.";
+            MensagemCor = "red";
+            Console.WriteLine(ex);
+        }
+    }
+
+    private void AdicionarGanho() => SalvarTransacao("ganho");
+    private void AdicionarGasto() => SalvarTransacao("gasto");
+}
+
+
+<h2>RESUMO FINANCEIRO</h2>
+
+<div class="resumo">
+    <p class="ganhos">Ganhos no mês: <strong>@GanhosMes.ToString("C")</strong></p>
+    <p class="gastos">Gastos no mês: <strong>@GastosMes.ToString("C")</strong></p>
+    <div class="saldo">Saldo Atual: <strong>@SaldoAtual.ToString("C")</strong></div>
+</div>
+
+<div class="form-container">
+    <h3>Adicionar Transação</h3>
+
+    <div class="form-group">
+        <label>Nome do Pagador:</label>
+        <input type="text" @bind="NovaTransacao.Nome_Pagador" />
+    </div>
+
+    <div class="form-group">
+        <label>Valor:</label>
+        <input type="number" step="0.01" @bind="NovaTransacao.Valor" />
+    </div>
+
+    <div class="form-group">
+        <label>Descrição:</label>
+        <input type="text" @bind="NovaTransacao.Descricao" />
+    </div>
+
+    <div class="form-actions">
+        <button @onclick="AdicionarGasto">Adicionar Gasto</button>
+        <button @onclick="AdicionarGanho"><i class="bi bi-plus-circle"></i> Adicionar Ganho</button>
+    </div>
+    @* mostra menssagens *@
+    @if (!string.IsNullOrEmpty(Mensagem))
+    {
+        <p class="msg" style="color:@MensagemCor">@Mensagem</p>
+    }
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Nome do Pagador</th>
+            <th>Descrição</th>
+            <th>Tipo</th>
+            <th>Valor</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Transacoes != null && Transacoes.Any())
+        {
+            @foreach (var t in Transacoes)
+            {
+                <tr>
+                    <td>@t.Data.ToString("dd/MM/yyyy")</td>
+                    <td>@t.Nome_Pagador</td>
+                    <td>@t.Descricao</td>
+                    <td>@t.Tipo</td>
+                    <td>@t.Valor.ToString("C")</td>
+
+                    <td>
+                        <a href="/financeiro/editar/@t.Id"
+                                style="background: #ffc107; color: #000; padding:5px 10px; border-radius:5px; margin-right:5px; text-decoration:none; display:inline-block;">
+                                   Editar
+                        </a>
+
+                        <button style="background: #dc3545; color: #fff; padding:5px 10px; border-radius:5px;"
+                                @onclick="@(() => ExcluirTransacao(t.Id))">
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr><td colspan="6">Nenhuma transação encontrada.</td></tr>
+        }
+    </tbody>
+</table>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #d0ebff;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        background-color: #fff;
+        margin: 40px auto;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        width: 90%;
+        max-width: 800px;
+    }
+
+    h2, h3 {
+        text-align: center;
+        color: #004d66;
+    }
+
+    .resumo {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+        text-align: center;
+        gap: 15px;
+    }
+
+        .resumo p, .saldo {
+            flex: 1 1 200px;
+            margin: 5px;
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            background-color: #e6f7ff;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+    .ganhos {
+        color: green;
+    }
+
+    .gastos {
+        color: red;
+    }
+
+    .saldo {
+        background-color: #004d66;
+        color: #fff;
+    }
+
+    .filtros {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    select {
+        padding: 6px;
+        border-radius: 5px;
+    }
+
+    .form-container {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    input {
+        width: 100%;
+        padding: 6px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    button {
+        flex: 1;
+        min-width: 120px;
+        background-color: #004d66;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+        button:hover {
+            background-color: #007b8a;
+        }
+
+    .msg {
+        text-align: center;
+        color: green;
+        display: absolute;
+        margin-top: 10px;
+        right: 0;
+        bottom: 0;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #004d66;
+        color: white;
+    }
+</style>

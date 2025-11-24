@@ -2,7 +2,8 @@
 @rendermode InteractiveServer
 
 @using Projeto_Odontpro.Models
-@inject AtendimetoPacienteDAO atendimentoDAO;
+@using Projeto_Odontpro.Models.Paciente
+@inject Projeto_Odontpro.Models.Paciente.AtendimetoPacienteDAO atendimentoDAO;
 @inject NavigationManager Navigation;
 
 <PageTitle>Atendimento ao Paciente</PageTitle>
@@ -15,10 +16,10 @@
   </div>
 }
 
-<EditForm Model="Atedimento" OnSubmit="Salvar">
+<EditForm Model="atendimento" OnSubmit="Salvar">
   <div class="mb-4">
     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-    <input @bind-value="Atendimento.Email" type="text" id="email"
+        <input @bind-value="atendimento.Email" type="text" id="email"
       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" />
   </div>
 
@@ -29,21 +30,25 @@
 
 @code {
 
-  private string erro = string.Empty;
 
-  [Parameter]
-  public int Id { get; set; }
 
-  [SupplyParameterFromForm]
-  private Paciente Atendimento { get; set; } = new();
+    private string erro = string.Empty;
+
+
+
+
+
+    public int id;
+
+  private Paciente atendimento = new();
 
   protected override void OnInitialized()
   {
-    var _atendimento = atendimentoDAO.BuscarPorId(Id);
+        var _atendimento = atendimentoDAO.BuscarPorId(id);
 
     if (_atendimento != null)
     {
-      Atendimento = _atendimento;
+            atendimento = _atendimento;
     }
     else
     {
@@ -55,7 +60,7 @@
   {
     try
     {
-      atendimentoDAO.Atualizar(Atendimento);
+            atendimentoDAO.Atualizar(atendimento);
 
       Navigation.NavigateTo("/AtedimentoPaciente");
     }

@@ -1,7 +1,7 @@
 ﻿@page "/ListaColaboradores"
-@using Projeto_Odontpro.Services
 @using Projeto_Odontpro.Models
-@inject FuncionarioService FuncionarioService
+@using Projeto_Odontpro.Models.Funcionario
+
 @inject NavigationManager NavigationManager
 
 <h3>Lista de Funcionários</h3>
@@ -61,15 +61,15 @@
 
 @code {
     private List<Funcionario>? funcionarios;
-
-    protected override async Task OnInitializedAsync()
+    //qualquer coisa com async, await e Task, provavelmente esta errado, ou esta da maneira mais dificio de ser feito
+    protected override void OnInitialized()
     {
-        funcionarios = await FuncionarioService.ObterTodos();
+       // funcionarios = await FuncionarioService.ObterTodos();
     }
 
     public async Task CarregarFuncionarios()
     {
-        funcionarios = await FuncionarioService.ObterTodos();
+       // funcionarios = await FuncionarioService.ObterTodos();
     }
 
     private void EditarFuncionario(int id)
@@ -88,7 +88,7 @@
 
     private async Task ExcluirFuncionario(int id)
     {
-        await FuncionarioService.Excluir(id);
+      //  await FuncionarioService.Excluir(id);
         await CarregarFuncionarios();
     }
 

@@ -1,9 +1,7 @@
-
-﻿using Projeto_Odontpro.Configs;﻿
 using Projeto_Odontpro.Configs;
 
 
-namespace Projeto_Odontpro.Models
+namespace Projeto_Odontpro.Models.Paciente
 {
     public class PacienteDAO
     {
@@ -18,7 +16,7 @@ namespace Projeto_Odontpro.Models
         {
             var lista = new List<Paciente>();
 
-            var comando = _conexao.CreateCommand("SELECT * FROM Paciente;");
+            var comando = _conexao.CreateCommand("SELECT * FROM paciente;");
             var leitor = comando.ExecuteReader();
 
             while (leitor.Read())
@@ -59,5 +57,10 @@ namespace Projeto_Odontpro.Models
                 throw;
             }
         }
+        public void Excluir(int id)
+        {
+
+        }
+    
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Projeto_Odontpro.Configs;
 
-namespace Projeto_Odontpro.Models
+namespace Projeto_Odontpro.Models.Funcionario
 {
     public class ColaboradorDAO
     {

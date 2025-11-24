@@ -1,6 +1,6 @@
 ﻿using Org.BouncyCastle.Operators;
 
-namespace Projeto_Odontpro.Models
+namespace Projeto_Odontpro.Models.Funcionario
 {
     public class Funcionario
     {

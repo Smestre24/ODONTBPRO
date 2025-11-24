@@ -1,0 +1,144 @@
+﻿@page "/produtos/cadastrar_produto"
+@using Projeto_Odontpro.Models.Produto
+@inject ProdutoDAO produtoDAO
+@inject NavigationManager nav
+
+@rendermode InteractiveServer
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #cce4ff;
+        display: flex;
+    }
+
+    .main {
+        flex: 1;
+        padding: 40px;
+    }
+
+    .form-container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        width: 500px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #2196f3;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .btn-salvar {
+        background-color: #42a5f5;
+    }
+
+    .btn-cancelar {
+        background-color: #6c757d;
+        margin-left: 10px;
+    }
+
+    .btn-salvar:hover {
+        background-color: #2196f3;
+    }
+</style>
+
+
+<div class="main">
+    <div class="form-container">
+        <h2>Cadastro de Produto</h2>
+
+        <EditForm Model="produto" OnValidSubmit="Salvar" FormName="CadastroProduto">
+
+            <label>Nome do Produto:</label>
+            <input type="text" @bind="produto.Nome" required />
+
+            <label>Quantidade:</label>
+            <input type="number" @bind="produto.Quantidade" required />
+
+            <label>Preço (R$):</label>
+            <input type="number" step="0.01" @bind="produto.Preco" required />
+
+            <label>Descrição:</label>
+            <input rows="3" @bind="produto.Descricao"></input>
+
+            <div>
+                <button type="submit" class="btn-salvar">Salvar</button>
+                <button type="button" class="btn-cancelar" @onclick="Cancelar">Cancelar</button>
+            </div>
+        </EditForm>
+
+        @if (!string.IsNullOrEmpty(mensagem))
+        {
+            <p style="color:@corMensagem; text-align:center; margin-top:15px;">
+                @mensagem
+            </p>
+        }
+    </div>
+</div>
+
+@code {
+    private Models.Produto.Produto produto = new();
+    private string mensagem = "";
+    private string corMensagem = "green";
+
+    private void Salvar()
+    {
+        try
+        {
+            if(produto.Quantidade == 0)
+            {
+                mensagem = "Quantidade não pode ser 0 ";
+                corMensagem = "red";
+                return;
+            }
+            else if (produto.Preco == 0)
+            {
+                mensagem = "Preço não pode ser R$ 0,00  ";
+                corMensagem = "red";
+                return;
+            }
+            
+            produtoDAO.Inserir(produto);
+            nav.NavigateTo("/produtos");
+
+        
+        }
+        catch (Exception ex)
+        {
+            mensagem = "Falha ao salvar: " + ex.Message;
+            corMensagem = "red";
+        }
+    }
+
+    private void Cancelar()
+    {
+        nav.NavigateTo("/produtos");
+    }
+}

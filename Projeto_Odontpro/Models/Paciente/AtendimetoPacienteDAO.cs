@@ -1,8 +1,7 @@
 ﻿using Projeto_Odontpro.Configs;
-using MySql.Data.MySqlClient;
-using Projeto_Odontpro.Components.Pages.AtendimentoPaciente;
 
-namespace Projeto_Odontpro.Models
+
+namespace Projeto_Odontpro.Models.Paciente
 {
     public class AtendimetoPacienteDAO
     {

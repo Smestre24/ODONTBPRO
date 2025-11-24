@@ -1,26 +1,24 @@
 using Projeto_Odontpro.Components;
-using Projeto_Odontpro.Models;
 using Projeto_Odontpro.Configs;
-using Projeto_Odontpro.Services;
-using MySql.Data;
-using System;
+using Projeto_Odontpro.Models.Financeiro;
+using Projeto_Odontpro.Models.Funcionario;
+using Projeto_Odontpro.Models.Produto;
+using Projeto_Odontpro.Models.Paciente;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSingleton<Conexao>();
-builder.Services.AddScoped<AtendimetoPacienteDAO>();
-builder.Services.AddSingleton<ContasAPagarDAO>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddScoped<FuncionarioService>();
-builder.Services.AddSingleton<PacienteService>();
-builder.Services.AddSingleton<FinanceiroService>();
-builder.Services.AddSingleton<FuncionarioService>();
+// adicione as classes terminadas por DAO aqui
 builder.Services.AddSingleton<FuncionarioDAO>();
+builder.Services.AddSingleton<FinanceiroDAO>();
+builder.Services.AddSingleton<ProdutoDAO>();
+builder.Services.AddSingleton<PacienteDAO>();
 
 
 var app = builder.Build();

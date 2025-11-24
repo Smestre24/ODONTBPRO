@@ -1,7 +1,6 @@
 ﻿@page "/editarfuncionario/{id:int}"
 @using Projeto_Odontpro.Models
-@using Projeto_Odontpro.Services
-@inject FuncionarioService FuncionarioService
+@using Projeto_Odontpro.Models.Funcionario
 @inject NavigationManager NavigationManager
 
 <h3>Editar Funcionário</h3>
@@ -42,15 +41,15 @@ else
     [Parameter] public int id { get; set; }
     private Funcionario funcionario;
 
-    protected override async Task OnInitializedAsync()
-    {
-        funcionario = await FuncionarioService.ObterPorId(id);
-    }
+    // protected override void OnInitialized()
+    // {
+    //     funcionario =  FuncionarioService.ObterPorId(id);
+    // }
 
     private async Task Salvar()
     {
-        await FuncionarioService.Adicionar(funcionario);
-        NavigationManager.NavigateTo("/ListaColaboradores");
+        //FuncionarioService.Adicionar(funcionario);
+        //NavigationManager.NavigateTo("/ListaColaboradores");
     }
 
     private void Cancelar()

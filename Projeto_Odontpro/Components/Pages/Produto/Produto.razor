@@ -1,0 +1,76 @@
+﻿@page "/produtos"
+@using Projeto_Odontpro.Models.Produto
+@inject ProdutoDAO produtoDAO
+@inject NavigationManager NavigationManager
+
+@* sempre use esse codigo para formularios  *@
+@rendermode InteractiveServer
+
+<h3>Produtos</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Quantidade</th>
+            <th>Preço</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (produtos == null)
+        {
+            <tr><td colspan="6">Carregando...</td></tr>
+        }
+        else if (produtos.Count == 0)
+        {
+            <tr><td colspan="6">Nenhum produto cadastrado.</td></tr>
+        }
+        else
+        {
+            @foreach (var p in produtos)
+            {
+                <tr>
+                    <td>@p.Id</td>
+                    <td>@p.Nome</td>
+                    <td>@p.Quantidade</td>
+                    <td>R$ @p.Preco</td>
+                    <td>@p.Descricao</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="() => EditarProduto(p.Id)">Editar</button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => ExcluirProduto(p.Id)">Excluir</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<NavLink class="btn btn-primary" href="/produtos/cadastrar_produto/">Adicionar Produto</NavLink>
+
+
+@code {
+    private List<Models.Produto.Produto> produtos = new();
+
+    protected override void OnInitialized()
+    {
+        Carregar();
+    }
+
+    private void Carregar()
+    {
+        produtos = produtoDAO.ListarTodos();
+    }
+
+    private void EditarProduto(int id)
+    {
+        NavigationManager.NavigateTo($"/produtos/{id}/editar");
+    }
+
+    private void ExcluirProduto(int id)
+    {
+        NavigationManager.NavigateTo($"/produtos/{id}/excluir");
+    }
+}
