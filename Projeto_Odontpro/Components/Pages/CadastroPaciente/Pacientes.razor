@@ -13,7 +13,7 @@
         <tr>
             <th>ID</th>
             <th>Nome</th>
-            <th>Email</th>
+
             <th>Telefone</th>
             <th>Sexo</th>
             <th>Nascimento</th>
@@ -39,7 +39,7 @@
                 <tr>
                     <td>@paciente.Id</td>
                     <td>@paciente.Nome</td>
-                    <td>@paciente.Email</td>
+
                     <td>@paciente.Telefone</td>
                     <td>@paciente.Sexo</td>
                     <td>@paciente.Nascimento.ToShortDateString()</td>
@@ -47,8 +47,9 @@
                     <td>@paciente.Endereco</td>
                     <td>@paciente.Observacoes</td>
                     <td>
-                        <button class="btn btn-primary btn-sm" @onclick="() => EditarCliente(paciente.Id)">Editar</button>
-                        <button class="btn btn-danger btn-sm" @onclick="() => ExcluirCliente(paciente.Id)">Excluir</button>
+                        @* <button class="btn btn-primary btn-sm" @onclick="() => EditarCliente(paciente.Id)">Editar</button>
+                <button class="btn btn-danger btn-sm" @onclick="() => ExcluirCliente(paciente.Id)">Excluir</button> *@
+                        <a class="btn btn-primary btn-sm" href="/pacientes/@paciente.Id/editar">Editar</a>
                     </td>
                 </tr>
             }
