@@ -1,0 +1,64 @@
+﻿@page "/prod/consultar"
+
+@using Projeto_Odontpro.Models.Produto;
+@inject ProdutoDAO produtoDAO;
+
+<PageTitle>Produtos</PageTitle>
+
+<h1 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-6">Produtos</h1>
+
+<a href="/produtos/novo" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Novo Produto</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Quantidade</th>
+            <th>Preço</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int contador = 1;
+
+            @foreach (var produto in listaProdutos)
+            {
+                <tr>
+                    <td>@produto.Id</td>
+                    <td>@produto.Nome</td>
+                    <td>@produto.Descricao</td>
+                    <td>@produto.Quantidade</td>
+                    <td>R$ @produto.Preco</td>
+                    <td>
+                        <a href="/produtos/@produto.Id/editar" class="btn btn-sm btn-primary mr-2">
+                            <i class="fas fa-edit"></i> Atualizar
+                        </a>
+                        <a href="/produtos/@produto.Id/excluir" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i> Excluir
+                        </a>
+                    </td>
+                </tr>
+
+                contador++;
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Models.Produto.Produto> listaProdutos = new();
+
+    protected override void OnInitialized()
+    {
+        CarregarProdutos();
+    }
+
+    private void CarregarProdutos()
+    {
+        listaProdutos = produtoDAO.ListarTodos();
+    }
+}
+
