@@ -13,6 +13,7 @@ namespace Projeto_Odontpro.Models.Funcionario
         public string Estado { get; set; }
         public DateTime Nascimento { get; set; }
         public string Endereco { get; set; }
+        public decimal Salario { get; set; }
         public string Observacoes { get; set; }
     }
 }
