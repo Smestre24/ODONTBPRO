@@ -4,6 +4,7 @@ using Projeto_Odontpro.Models.Financeiro;
 using Projeto_Odontpro.Models.Funcionario;
 using Projeto_Odontpro.Models.Produto;
 using Projeto_Odontpro.Models.Paciente;
+using Projeto_Odontpro.Models.Atendimento;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,7 @@ builder.Services.AddSingleton<FuncionarioDAO>();
 builder.Services.AddSingleton<FinanceiroDAO>();
 builder.Services.AddSingleton<ProdutoDAO>();
 builder.Services.AddSingleton<PacienteDAO>();
+builder.Services.AddSingleton<AtendimentoDAO>();
 
 
 var app = builder.Build();
