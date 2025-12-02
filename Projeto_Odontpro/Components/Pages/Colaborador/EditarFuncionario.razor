@@ -1,7 +1,9 @@
 ﻿@page "/editarfuncionario/{id:int}"
-@using Projeto_Odontpro.Models
+@rendermode InteractiveServer
+
 @using Projeto_Odontpro.Models.Funcionario
-@inject NavigationManager NavigationManager
+@inject ColaboradorDAO colaboradorDAO;
+@inject NavigationManager NavigationManager;
 
 <h3>Editar Funcionário</h3>
 

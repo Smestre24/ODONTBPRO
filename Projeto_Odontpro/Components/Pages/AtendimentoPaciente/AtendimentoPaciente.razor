@@ -1,6 +1,9 @@
 ﻿@page "/AtendimentoPaciente"
-@rendermode InteractiveServer
+@using Projeto_Odontpro.Models.Atendimento
+@inject AtendimentoDAO atendimentoDAO
+@inject NavigationManager NavigationManager
 
+@rendermode InteractiveServer
 
 
 
@@ -27,7 +30,7 @@
 
             <div class="checkbox-row">           
                 <input id="selectAll" type="checkbox" @bind="SelectAllEmails" />
-                <label for="selectAll">Selecionar todos os nomes ativos do banco de dados.</label>
+                <label for="selectAll">Selecionar todos os telefones ativos do banco de dados.</label>
                
             </div>
 
@@ -56,12 +59,32 @@
     //nao precisa desses get/sets nesse trecho de codigo, apenas dentro da pasta Models na hora de criar um objeto
     private string Message { get; set; } = "";
     private bool SelectAllEmails { get; set; } = false;
-    private string Notification { get; set; } = "";
+    public string Notification { get; set; } = "";
 
 
     private void OnProceed()
     {
+        if (string.IsNullOrWhiteSpace(Message))
+        {
+            Notification = "A mensagem não pode estar vazia.";
+            StateHasChanged();
+            return;
+        }
+        else
+        {
+            Notification = "Mensagem enviada com sucesso!";
+        }
+
+
+  
+        Message = "";
+
+        StateHasChanged();
+
+   
         
+        Notification = "";
+        StateHasChanged();
     }
 
 }

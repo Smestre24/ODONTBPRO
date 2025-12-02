@@ -7,8 +7,9 @@ namespace Projeto_Odontpro.Models.Atendimento
     {    
         
             private readonly Conexao _conexao;
+     
 
-            public AtendimentoDAO(Conexao conexao)
+        public AtendimentoDAO(Conexao conexao)
             {
                 _conexao = conexao;
             }
