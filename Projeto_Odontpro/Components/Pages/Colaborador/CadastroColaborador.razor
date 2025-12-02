@@ -232,7 +232,7 @@
     </div>
 
     <script>
-        const form = document.getElementById('patientForm');
+        const form = document.getElementById('colaboratorForm');
         const successMsg = document.getElementById('successMsg');
 
         form.addEventListener('submit', function (e) {
@@ -240,12 +240,15 @@
 
             const colaborador = {
                 codigo: document.getElementById('codigo').value,
-                nome: document.getElementById('namePac').value,
+                nome: document.getElementById('nameCol').value,
+                email: document.getElementById('email').value,
                 sexo: document.getElementById('sexo').value,
                 telefone: document.getElementById('phone').value,
-                nascimento: document.getElementById('birthdate').value,
+                cargo: document.getElementById('cargo').value,
                 estado: document.getElementById('estado').value,
+                nascimento: document.getElementById('birthdate').value,
                 endereco: document.getElementById('address').value,
+                salario: document.getElementById('salary').value,
                 observacoes: document.getElementById('notes').value
             };
 

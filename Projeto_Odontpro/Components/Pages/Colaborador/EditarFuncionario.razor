@@ -23,6 +23,10 @@ else
             <InputText @bind-Value="funcionario.Email" class="form-control" />
         </div>
         <div class="mb-3">
+            <label>Sexo</label>
+            <InputText @bind-Value="funcionario.Sexo" class="form-control" />
+        </div>
+        <div class="mb-3">
             <label>Telefone</label>
             <InputText @bind-Value="funcionario.Telefone" class="form-control" />
         </div>
@@ -34,6 +38,22 @@ else
             <label>Estado</label>
             <InputText @bind-Value="funcionario.Estado" class="form-control" />
         </div>
+        <div class="mb-3">
+            <label>Nascimento</label>
+            <InputText @bind-Value="funcionario.Nascimento" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Endereco</label>
+            <InputText @bind-Value="funcionario.Endereco" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Salario</label>
+            <InputText @bind-Value="funcionario.Salario" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label>Observacoes</label>
+            <InputText @bind-Value="funcionario.Observacoes" class="form-control" />
+        </div>
         <button type="submit" class="btn btn-success">Salvar</button>
         <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
     </EditForm>
@@ -43,15 +63,27 @@ else
     [Parameter] public int id { get; set; }
     private Funcionario funcionario;
 
-    // protected override void OnInitialized()
-    // {
-    //     funcionario =  FuncionarioService.ObterPorId(id);
-    // }
+    protected override void OnInitialized()
+    {
+        funcionario =  FuncionarioService.ObterPorId(id);
+
+        if (encontrado != null)
+            funcionario = encontrado;
+        else
+            erro = "Funcionario não encontrado.";
+    }
 
     private async Task Salvar()
     {
-        //FuncionarioService.Adicionar(funcionario);
-        //NavigationManager.NavigateTo("/ListaColaboradores");
+        try
+        {
+            FuncionarioService.Adicionar(funcionario);
+            NavigationManager.NavigateTo("/ListaColaboradores");
+        }
+        catch (Exception ex)
+        {
+            erro = $"Erro ao salvar o funcionario: {ex.Message}";
+        }
     }
 
     private void Cancelar()
