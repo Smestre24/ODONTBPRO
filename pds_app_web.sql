@@ -6,9 +6,14 @@ create table funcionario (
     id_func int primary key auto_increment,
     nome_func varchar(100) not null,
     email_func varchar(100) not null,
+    sexo_func varchar(100) not null,
     telefone_func varchar(20),
     cargo_func varchar(50),
-    estado_func varchar(50)
+    estado_func varchar(50),
+    nascimento_func datetime,
+    endereco_func varchar(100),
+    salario_func float,
+    observacoes_func varchar(100)
 );
 
 -- tabela de clientes/pacientes
